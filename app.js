@@ -8,7 +8,7 @@ const app = express(); // invoking/creating the express application
 // controller imports
 const log = require('./controllers/logcontroller'); 
 const user = require('./controllers/usercontroller');
-const workout = require('./controllers/workoutcontroller');
+// const workout = require('./controllers/workoutcontroller');
 
 // db import & sync
 const sequelize = require('./db');
@@ -19,11 +19,9 @@ app.use(express.json());
 app.use(require('./middleware/headers'));
 
 // routes
-app.use('/api', workout);
-// app.use('/api/log', log);  //if endpoint is api/log, do the log functions else
-// app.use('/api/user', user);   // if endpoint is api (without the /log)
-// app.use('/api/login', user);   // if endpoint is api (without the /log)
+app.use('/api', user);   
 app.use(require('./middleware/validate-session'))
+app.use('/api', log);
 
 
 // app.listen(3000, () => console.log('Log app is listening on 3000'));

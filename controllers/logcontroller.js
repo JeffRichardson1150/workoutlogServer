@@ -5,8 +5,6 @@ const Log = require('../db').import('../models/log'); // if can access db, then 
 
 /*
 Endpoint        Verb	Description
-/api/user/	    POST	Allows a new user to be created with a username and password.
-/api/login/	    POST	Allows log in with an existing user.
 /api/log/	    POST	Allows users to create a workout log with descriptions, definitions, results, and owner properties.
 /api/log/	    GET	    Gets all logs for an individual user.
 /api/log/:id	GET	    Gets individual logs by id for an individual user.
@@ -21,7 +19,7 @@ Endpoint        Verb	Description
 /**********************
  * Post a log
  */
-router.post('/', (req, res) => {
+router.post('/log', (req, res) => {
     const logFromRequest = {
         description: req.body.description,
         definition: req.body.definition,
@@ -41,7 +39,7 @@ router.post('/', (req, res) => {
 /*******************************
  * Get all logs
  */
-router.get('/', (req, res) =>{
+router.get('/log', (req, res) =>{
     Log.findAll()
         .then(log => {
             res.status(200).json(log)
@@ -55,7 +53,7 @@ router.get('/', (req, res) =>{
 /*****************
  * Get a single requested log
  */
-router.get('/:id', (req, res) => { // can put the search string at the end of the URL
+router.get('/log/:id', (req, res) => { // can put the search string at the end of the URL
     Log.findOne({ // find first instance of ...
             where: {
                 id: req.params.id
@@ -71,7 +69,7 @@ router.get('/:id', (req, res) => { // can put the search string at the end of th
 changing
 If specify the id of a log, update that log using the contents of body
 ********************************************* */
-router.put('/:id', (req, res) => { 
+router.put('/log/:id', (req, res) => { 
     Log.update(req.body, {
             where: {
                 id: req.params.id
@@ -85,7 +83,7 @@ router.put('/:id', (req, res) => {
 Delete
 specify the id of the record to delete at the end of the URL
 ********************************************* */
-router.delete('/:id', (req, res) => {
+router.delete('/log/:id', (req, res) => {
     Log.destroy({
         where: {
             id: req.params.id

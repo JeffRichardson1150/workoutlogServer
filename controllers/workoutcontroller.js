@@ -17,7 +17,7 @@ Endpoint        Verb	Description
 
 // router.post('/user', (req, res) => {
 router.post('/user', (req, res) => {
-    console.log("******************** You're in /user processing - Create New User ********************");
+    console.log("******************** You're in workoutcontroller /user processing - Create New User ********************");
     User.create({
         userName: req.body.userName,
         password: bcrypt.hashSync(req.body.password, 10)

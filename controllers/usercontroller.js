@@ -11,14 +11,17 @@ Endpoint        Verb	Description
 
 // router.post('/user', (req, res) => {
 router.post('/user', (req, res) => {
-    console.log("******************** You're in /user processing - Create New User ********************");
+    console.log("******************** You're in usercontroller /user processing - Create New User ********************");
+    console.log(req);
+    console.log(req.body)
+    console.log("req.body.password: ", req.body.password);
     User.create({
         userName: req.body.userName,
         password: bcrypt.hashSync(req.body.password, 10)
-        // password: req.body.password
     })
     .then(
         createSuccess = (user) => {
+            console.log("******* in usercontroller /user (create user) createSuccess -- encrypted password : ", req.body.password)
             let token = jwt.sign({
                 id: user.id
             }, process.env.JWT_SECRET, {
@@ -30,31 +33,36 @@ router.post('/user', (req, res) => {
                 sessionToken: token
             })
         }, 
-        createError = err => res.send(500, err)
+        createError = err => res.status(500).send({error: 'failed to authenticate'})
     )
 })
 
 router.post('/login', (req, res) => {
+    console.log("************* usercontroller  /login  req.body.userName: ", req.body.userName);
     User.findOne({
         where: {
             userName: req.body.userName
         }
     })
     .then(user => {
+        console.log("***************  in the .then - found user ", user.userName);
         if(user){
             bcrypt.compare(req.body.password, user.password, (err, matches) => {
                 if(matches){
+                    console.log("************************ the user matched. assign token to user.id: ", user.id)
                     let token = jwt.sign({
                         id: user.id
                     }, process.env.JWT_SECRET, {
                         expiresIn: 60*60*24
                     })
+                    console.log("******************************* jsonify (using res.json) user: ", user, " sessionToken: ", token)
                     res.json({
                         user: user,
                         message: 'user successfully logged in',
                         sessionToken: token
                     })
                 } else {
+                    console.log("******************************* the user DID NOT match anyone in the user DB")
                     res.status(502).send({error: 'bad gateway'})
                 }
             })

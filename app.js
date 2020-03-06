@@ -19,8 +19,10 @@ app.use(express.json());
 app.use(require('./middleware/headers'));
 
 // routes
+console.log('**************************** user route in app.js **********************************')
 app.use('/api', user);   
 app.use(require('./middleware/validate-session'))
+console.log('**************************** log route in app.js **********************************')
 app.use('/api', log);
 
 
